@@ -1,10 +1,16 @@
 # grobots
 
-
-
 alpha development examples
 
-for dev and test purposes only, all rights reserved, iryanb at guarden dot io (c) 2017
+for dev and test purposes only, all rights reserved
+
+© Copyright 2005-2018, New Global Enterprises
+
+Supply Chain Analytics(TM) 
+
+C O N F I D E N T I A L
+
+in partnership with guarden.io (c) 2018
 
 Usage License: MIT
 
