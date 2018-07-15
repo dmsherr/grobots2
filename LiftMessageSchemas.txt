@@ -1,0 +1,65 @@
+ LiftInfo:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      LiftDescription:
+        type: string
+      LiftIPV6Id:
+        type: string
+      LiftStartTime:
+        type: string
+      LiftStartTimeUnix: 
+        type: string 
+      LocationId:
+        type: string
+      LiftFuelLevel: 
+        type: number 
+      LiftFuelType: 
+        type: string 
+      LiftForkPosition: 
+        type: number 
+      LiftDirection: 
+        type: string
+      LiftVibrationHz: 
+        type: number
+      LiftVelocity: 
+        type: number
+      LiftEngineTempC: 
+        type: number
+      LiftEngineTempF: 
+        type: number
+      LiftEngineTempK: 
+        type: number
+      LiftEngineTempR: 
+        type: number
+      LiftLatitude: 
+        type: number 
+      LiftLongitude:
+        type: number
+      LiftWeight:
+        type: number
+      LiftClass:
+        type: string 
+
+  LiftWork:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      LiftWorkDescription:
+        type: string
+      LiftWorkId:
+        type: string
+      LiftWorkStartTime:
+        type: string
+      LiftWorkStopTime: 
+        type: string
+      LiftWorkLocationId:
+        type: string
+      LiftLoadCenter:
+        type: number
+      LiftWorkWeight:
+        type: number
