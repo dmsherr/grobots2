@@ -1,0 +1,60 @@
+READ ME
+SCA Operations Management API Client Emulator
+Author:  Ryan Bagnulo @iryanb
+Copyright 2018. 
+All Rights Reserved.
+MIT License.
+
+Instructions on running this emulator with Ruby (Win)
+
+\Ruby25-x64\bin\ruby.exe opsmgmt_APIclient_emulator.rb
+
+
+2018-08-13 09:04:12 -0700
+1 Response Message {"LiftDescription"=>"Description", "LiftIPV6Id"=>"00001111222
+2333344445555", "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"",
+"LocationId"=>"Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric",
+ "LiftForkPosition"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2500.00",
+ "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6",
+ "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123.
+45678", "LiftWeight"=>"3000", "LiftClass"=>"III"}
+************** PARSED JSON FIELD ****************
+1 LiftVibrationHz = 2500.00
+2 Response Message {"LiftDescription"=>"Description", "LiftIPV6Id"=>"00001111222
+2333344445555", "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"",
+"LocationId"=>"Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric",
+ "LiftForkPosition"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2500.00",
+ "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6",
+ "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123.
+45678", "LiftWeight"=>"3000", "LiftClass"=>"III"}
+************** PARSED JSON FIELD ****************
+2 LiftVibrationHz = 2500.00
+3 Response Message {"LiftDescription"=>"Description", "LiftIPV6Id"=>"00001111222
+2333344445555", "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"",
+"LocationId"=>"Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric",
+ "LiftForkPosition"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2500.00",
+ "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6",
+ "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123.
+45678", "LiftWeight"=>"3000", "LiftClass"=>"III"}
+************** PARSED JSON FIELD ****************
+3 LiftVibrationHz = 2500.00
+4 Response Message {"LiftDescription"=>"Description", "LiftIPV6Id"=>"00001111222
+2333344445555", "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"",
+"LocationId"=>"Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric",
+ "LiftForkPosition"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2500.00",
+ "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6",
+ "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123.
+45678", "LiftWeight"=>"3000", "LiftClass"=>"III"}
+************** PARSED JSON FIELD ****************
+4 LiftVibrationHz = 2500.00
+5 Response Message {"LiftDescription"=>"Description", "LiftIPV6Id"=>"00001111222
+2333344445555", "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"",
+"LocationId"=>"Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric",
+ "LiftForkPosition"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2500.00",
+ "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6",
+ "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123.
+45678", "LiftWeight"=>"3000", "LiftClass"=>"III"}
+************** PARSED JSON FIELD ****************
+5 LiftVibrationHz = 2500.00
+Completed 5api requests  in 1.046356 seconds.
+The Time now is 2018-08-13 09:04:13 -0700
