@@ -19,9 +19,9 @@ n=0
 
 responseMsg = RestClient.get "http://p0st3r.gateway.akana.com/SCA/v0/IntelligentAgent/lifts", 'Accept'=>"application/json"
 responseMsgparsed = JSON.parse(responseMsg)
-fieldA = responseMsgparsed["LiftVibrationHz"]
-#fieldB = responseMsgparsed[0]["FieldB"]
-#fieldC = responseMsgparsed[0]["FieldC"]
+fieldA = responseMsgparsed[0]["LiftVibrationHz"]
+fieldB = responseMsgparsed[1]["LiftVibrationHz"]
+fieldC = responseMsgparsed[2]["LiftVibrationHz"]
 
 n=n+1
 
@@ -30,12 +30,12 @@ n=n+1
 
 puts n.to_s + " Response Message " + responseMsgparsed.to_s 
 puts "************** PARSED JSON FIELD ****************"
-puts n.to_s + " LiftVibrationHz = " + fieldA.to_s 
+puts n.to_s + " Vibration (Hz), Lift 1 = " + fieldA.to_s + ", Lift 2 = " + fieldB.to_s + ", Lift 3 = " + fieldC.to_s 
 
 end                                                                  
 
 elapsed = Time.now - gettime
 
-puts "Completed " + n.to_s + "api requests " + " in " + elapsed.to_s + " seconds." 
+puts "Completed " + n.to_s + " api requests " + " in " + elapsed.to_s + " seconds." 
 
 puts "The Time now is " + Time.now.to_s 

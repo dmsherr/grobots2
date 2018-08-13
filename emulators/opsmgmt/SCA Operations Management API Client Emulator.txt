@@ -9,52 +9,116 @@ Instructions on running this emulator with Ruby (Win)
 
 \Ruby25-x64\bin\ruby.exe opsmgmt_APIclient_emulator.rb
 
-
-2018-08-13 09:04:12 -0700
-1 Response Message {"LiftDescription"=>"Description", "LiftIPV6Id"=>"00001111222
-2333344445555", "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"",
-"LocationId"=>"Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric",
- "LiftForkPosition"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2500.00",
- "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6",
- "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123.
-45678", "LiftWeight"=>"3000", "LiftClass"=>"III"}
+2018-08-13 09:50:33 -0700
+1 Response Message [{"LiftDescription"=>"Description", "LiftIPV6Id"=>"0000111122
+22333344445555", "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"",
+ "LocationId"=>"Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric"
+, "LiftForkPosition"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2424.00"
+, "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6"
+, "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123
+.45678", "LiftWeight"=>"3000", "LiftClass"=>"III"}, {"LiftDescription"=>"Descrip
+tion", "LiftIPV6Id"=>"000011112222333344445556", "LiftStartTime"=>"07/16/2018 2:
+22:00", "LiftStartTimeUnix"=>"", "LocationId"=>"Location A", "LiftFuelLevel"=>"0
+.50", "LiftFuelType"=>"Electric", "LiftForkPosition"=>"0.00", "LiftDirection"=>"
+N", "LiftVibrationHz"=>"2500.00", "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"3
+2.00", "LiftEngineTempF"=>"89.6", "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"3
+7.12345", "LiftLongitude"=>"-123.45678", "LiftWeight"=>"3000", "LiftClass"=>"III
+"}, {"LiftDescription"=>"Description", "LiftIPV6Id"=>"000011112222333344445557",
+ "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"", "LocationId"=>"
+Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric", "LiftForkPosit
+ion"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2400.00", "LiftVelocity"
+=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6", "LiftEngineTem
+pK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123.45678", "LiftWe
+ight"=>"3000", "LiftClass"=>"III"}]
 ************** PARSED JSON FIELD ****************
-1 LiftVibrationHz = 2500.00
-2 Response Message {"LiftDescription"=>"Description", "LiftIPV6Id"=>"00001111222
-2333344445555", "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"",
-"LocationId"=>"Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric",
- "LiftForkPosition"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2500.00",
- "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6",
- "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123.
-45678", "LiftWeight"=>"3000", "LiftClass"=>"III"}
+1 Vibration (Hz), Lift 1 = 2424.00, Lift 2 = 2500.00, Lift 3 = 2400.00
+2 Response Message [{"LiftDescription"=>"Description", "LiftIPV6Id"=>"0000111122
+22333344445555", "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"",
+ "LocationId"=>"Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric"
+, "LiftForkPosition"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2424.00"
+, "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6"
+, "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123
+.45678", "LiftWeight"=>"3000", "LiftClass"=>"III"}, {"LiftDescription"=>"Descrip
+tion", "LiftIPV6Id"=>"000011112222333344445556", "LiftStartTime"=>"07/16/2018 2:
+22:00", "LiftStartTimeUnix"=>"", "LocationId"=>"Location A", "LiftFuelLevel"=>"0
+.50", "LiftFuelType"=>"Electric", "LiftForkPosition"=>"0.00", "LiftDirection"=>"
+N", "LiftVibrationHz"=>"2500.00", "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"3
+2.00", "LiftEngineTempF"=>"89.6", "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"3
+7.12345", "LiftLongitude"=>"-123.45678", "LiftWeight"=>"3000", "LiftClass"=>"III
+"}, {"LiftDescription"=>"Description", "LiftIPV6Id"=>"000011112222333344445557",
+ "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"", "LocationId"=>"
+Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric", "LiftForkPosit
+ion"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2400.00", "LiftVelocity"
+=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6", "LiftEngineTem
+pK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123.45678", "LiftWe
+ight"=>"3000", "LiftClass"=>"III"}]
 ************** PARSED JSON FIELD ****************
-2 LiftVibrationHz = 2500.00
-3 Response Message {"LiftDescription"=>"Description", "LiftIPV6Id"=>"00001111222
-2333344445555", "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"",
-"LocationId"=>"Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric",
- "LiftForkPosition"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2500.00",
- "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6",
- "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123.
-45678", "LiftWeight"=>"3000", "LiftClass"=>"III"}
+2 Vibration (Hz), Lift 1 = 2424.00, Lift 2 = 2500.00, Lift 3 = 2400.00
+3 Response Message [{"LiftDescription"=>"Description", "LiftIPV6Id"=>"0000111122
+22333344445555", "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"",
+ "LocationId"=>"Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric"
+, "LiftForkPosition"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2424.00"
+, "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6"
+, "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123
+.45678", "LiftWeight"=>"3000", "LiftClass"=>"III"}, {"LiftDescription"=>"Descrip
+tion", "LiftIPV6Id"=>"000011112222333344445556", "LiftStartTime"=>"07/16/2018 2:
+22:00", "LiftStartTimeUnix"=>"", "LocationId"=>"Location A", "LiftFuelLevel"=>"0
+.50", "LiftFuelType"=>"Electric", "LiftForkPosition"=>"0.00", "LiftDirection"=>"
+N", "LiftVibrationHz"=>"2500.00", "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"3
+2.00", "LiftEngineTempF"=>"89.6", "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"3
+7.12345", "LiftLongitude"=>"-123.45678", "LiftWeight"=>"3000", "LiftClass"=>"III
+"}, {"LiftDescription"=>"Description", "LiftIPV6Id"=>"000011112222333344445557",
+ "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"", "LocationId"=>"
+Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric", "LiftForkPosit
+ion"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2400.00", "LiftVelocity"
+=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6", "LiftEngineTem
+pK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123.45678", "LiftWe
+ight"=>"3000", "LiftClass"=>"III"}]
 ************** PARSED JSON FIELD ****************
-3 LiftVibrationHz = 2500.00
-4 Response Message {"LiftDescription"=>"Description", "LiftIPV6Id"=>"00001111222
-2333344445555", "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"",
-"LocationId"=>"Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric",
- "LiftForkPosition"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2500.00",
- "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6",
- "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123.
-45678", "LiftWeight"=>"3000", "LiftClass"=>"III"}
+3 Vibration (Hz), Lift 1 = 2424.00, Lift 2 = 2500.00, Lift 3 = 2400.00
+4 Response Message [{"LiftDescription"=>"Description", "LiftIPV6Id"=>"0000111122
+22333344445555", "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"",
+ "LocationId"=>"Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric"
+, "LiftForkPosition"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2424.00"
+, "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6"
+, "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123
+.45678", "LiftWeight"=>"3000", "LiftClass"=>"III"}, {"LiftDescription"=>"Descrip
+tion", "LiftIPV6Id"=>"000011112222333344445556", "LiftStartTime"=>"07/16/2018 2:
+22:00", "LiftStartTimeUnix"=>"", "LocationId"=>"Location A", "LiftFuelLevel"=>"0
+.50", "LiftFuelType"=>"Electric", "LiftForkPosition"=>"0.00", "LiftDirection"=>"
+N", "LiftVibrationHz"=>"2500.00", "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"3
+2.00", "LiftEngineTempF"=>"89.6", "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"3
+7.12345", "LiftLongitude"=>"-123.45678", "LiftWeight"=>"3000", "LiftClass"=>"III
+"}, {"LiftDescription"=>"Description", "LiftIPV6Id"=>"000011112222333344445557",
+ "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"", "LocationId"=>"
+Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric", "LiftForkPosit
+ion"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2400.00", "LiftVelocity"
+=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6", "LiftEngineTem
+pK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123.45678", "LiftWe
+ight"=>"3000", "LiftClass"=>"III"}]
 ************** PARSED JSON FIELD ****************
-4 LiftVibrationHz = 2500.00
-5 Response Message {"LiftDescription"=>"Description", "LiftIPV6Id"=>"00001111222
-2333344445555", "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"",
-"LocationId"=>"Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric",
- "LiftForkPosition"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2500.00",
- "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6",
- "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123.
-45678", "LiftWeight"=>"3000", "LiftClass"=>"III"}
+4 Vibration (Hz), Lift 1 = 2424.00, Lift 2 = 2500.00, Lift 3 = 2400.00
+5 Response Message [{"LiftDescription"=>"Description", "LiftIPV6Id"=>"0000111122
+22333344445555", "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"",
+ "LocationId"=>"Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric"
+, "LiftForkPosition"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2424.00"
+, "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6"
+, "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123
+.45678", "LiftWeight"=>"3000", "LiftClass"=>"III"}, {"LiftDescription"=>"Descrip
+tion", "LiftIPV6Id"=>"000011112222333344445556", "LiftStartTime"=>"07/16/2018 2:
+22:00", "LiftStartTimeUnix"=>"", "LocationId"=>"Location A", "LiftFuelLevel"=>"0
+.50", "LiftFuelType"=>"Electric", "LiftForkPosition"=>"0.00", "LiftDirection"=>"
+N", "LiftVibrationHz"=>"2500.00", "LiftVelocity"=>"3 MPH", "LiftEngineTempC"=>"3
+2.00", "LiftEngineTempF"=>"89.6", "LiftEngineTempK"=>"315.6", "LiftLatitude"=>"3
+7.12345", "LiftLongitude"=>"-123.45678", "LiftWeight"=>"3000", "LiftClass"=>"III
+"}, {"LiftDescription"=>"Description", "LiftIPV6Id"=>"000011112222333344445557",
+ "LiftStartTime"=>"07/16/2018 2:22:00", "LiftStartTimeUnix"=>"", "LocationId"=>"
+Location A", "LiftFuelLevel"=>"0.50", "LiftFuelType"=>"Electric", "LiftForkPosit
+ion"=>"0.00", "LiftDirection"=>"N", "LiftVibrationHz"=>"2400.00", "LiftVelocity"
+=>"3 MPH", "LiftEngineTempC"=>"32.00", "LiftEngineTempF"=>"89.6", "LiftEngineTem
+pK"=>"315.6", "LiftLatitude"=>"37.12345", "LiftLongitude"=>"-123.45678", "LiftWe
+ight"=>"3000", "LiftClass"=>"III"}]
 ************** PARSED JSON FIELD ****************
-5 LiftVibrationHz = 2500.00
-Completed 5api requests  in 1.046356 seconds.
-The Time now is 2018-08-13 09:04:13 -0700
+5 Vibration (Hz), Lift 1 = 2424.00, Lift 2 = 2500.00, Lift 3 = 2400.00
+Completed 5 api requests  in 5.277914 seconds.
+The Time now is 2018-08-13 09:50:39 -0700
