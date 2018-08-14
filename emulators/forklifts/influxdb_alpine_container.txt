@@ -1,0 +1,664 @@
+influxdb in a docker container
+
+Author: Ryan Bagnulo @iryanb
+
+Copyright 2018.  All Rights Reserved
+Use Case:  Supply Chain Automation, IoT Sensor Time Series Data Persistence 
+
+
+
+
+******   run a shell in the container and start the influx CLI to create a database *****
+
+docker exec -i -t {containername} /bin/bash
+
+
+bash-4.3# 
+
+influx -precision rfc3339
+
+Connected to http://localhost:8086 version 1.6.1
+
+InfluxDB shell version: 1.6.1
+
+create database SCA
+> show databases
+name: databases
+name
+----
+mydb
+_internal
+SCA
+
+
+
+create database SCA
+use SCA
+
+INSERT vibrationandtemp,liftID=5555,type=classIII liftvibrationHz=2424.00,lifttemperatureC=32,lifttemperatureF=89.6
+
+INSERT vibrationandtemp,liftID=5555,type=classIII liftvibrationHz=2424.00,lifttemperatureC=32,lifttemperatureF=89.6
+> select * from vibrationandtemp
+name: vibrationandtemp
+time                           liftID lifttemperatureC lifttemperatureF liftvibrationHz type
+----                           ------ ---------------- ---------------- --------------- ----
+2018-08-14T02:02:47.899990211Z 5555   32               89.6             2424            classIII
+
+
+INSERT vibrationandtemp,liftID=5555,type=classIII liftvibrationHz=2424.00,lifttemperatureC=32,lifttemperatureF=89.6
+INSERT vibrationandtemp,liftID=5556,type=classIII liftvibrationHz=2600.00,lifttemperatureC=30,lifttemperatureF=86.9
+INSERT vibrationandtemp,liftID=5557,type=classIV liftvibrationHz=2500.00,lifttemperatureC=31,lifttemperatureF=88
+INSERT vibrationandtemp,liftID=5558,type=classI liftvibrationHz=2700.00,lifttemperatureC=33,lifttemperatureF=92
+
+> > 
+> select * from vibrationandtemp
+name: vibrationandtemp
+time                           liftID lifttemperatureC lifttemperatureF liftvibrationHz type
+----                           ------ ---------------- ---------------- --------------- ----
+2018-08-14T02:02:47.899990211Z 5555   32               89.6             2424            classIII
+2018-08-14T02:05:28.903162146Z 5556   30               86.9             2600            classIII
+2018-08-14T02:05:28.911510502Z 5557   31               88               2500            classIV
+2018-08-14T02:05:30.465754652Z 5558   33               92               2700            classI
+
+
+
+
+https://docs.influxdata.com/influxdb/latest/query_language/spec/
+
+
+Read via REST API 
+
+curl -G 'http://localhost:8086/query' --data-urlencode "db=SCA" --data-urlencode "chunked=true" --data-urlencode "chunk_size=20000" --data-urlencode "q=SELECT * FROM vibrationandtemp"
+
+
+curl -G 'http://localhost:8086/query' --data-urlencode "db=SCA" --data-urlencode "chunked=true" --data-urlencode "chunk_size=20000" --data-urlencode "q=SELECT * FROM vibrationandtemp"
+{"results":[{"statement_id":0,"series":[{"name":"vibrationandtemp","columns":["time","liftID","lifttemperatureC","lifttemperatureF","liftvibrationHz","type"],"values":[["2018-08-14T02:02:47.899990211Z","5555",32,89.6,2424,"classIII"],["2018-08-14T02:05:28.903162146Z","5556",30,86.9,2600,"classIII"],["2018-08-14T02:05:28.911510502Z","5557",31,88,2500,"classIV"],["2018-08-14T02:05:30.465754652Z","5558",33,92,2700,"classI"]]}]}]}
+
+
+
+
+*************
+https://docs.influxdata.com/influxdb/v1.6/guides/writing_data/
+
+
+{"results":[{"statement_id":0,"series":[{"name":"liftwork","columns":["time","LiftWorkDescription","LiftWorkId","value"],"values":[["2018-08-14T02:29:40.731044643Z","workdescriptiontext","workidtext",0]]}]}]}
+
+curl -i -XPOST 'http://localhost:8086/write?db=SCA' --data-binary 'liftwork,LiftWorkDescription=DryGoods_1234,LiftWorkId=5555 liftworkweight=2000'
+
+curl -i -XPOST 'http://localhost:8086/write?db=SCA' --data-binary 'liftwork,LiftWorkDescription=DryGoods_5678,LiftWorkId=5556 liftworkweight=3000'
+
+curl -i -XPOST 'http://localhost:8086/write?db=SCA' --data-binary 'liftwork,LiftWorkDescription=Outgoing_0001,LiftWorkId=5557 liftworkweight=4000'
+
+curl -i -XPOST 'http://localhost:8086/write?db=SCA' --data-binary 'liftwork,LiftWorkDescription=Outgoing_0002,LiftWorkId=5558 liftworkweight=2400'
+
+curl -i -XPOST 'http://localhost:8086/write?db=SCA' --data-binary 'liftwork,LiftWorkDescription=Outgoing_0003,LiftWorkId=5559 liftworkweight=1000'
+
+Expected Response from POST 
+
+HTTP/1.1 204 No Content
+Content-Type: application/json
+Request-Id: 3c53b312-9f6a-11e8-802b-000000000000
+X-Influxdb-Build: OSS
+X-Influxdb-Version: 1.6.1
+X-Request-Id: 3c53b312-9f6a-11e8-802b-000000000000
+Date: Tue, 14 Aug 2018 02:32:06 GMT
+
+
+***************
+HTTP REST API QUERY to Influx DB Time Series Database liftwork table 
+
+curl -G 'http://localhost:8086/query' --data-urlencode "db=SCA" --data-urlencode "chunked=true" --data-urlencode "chunk_size=20000" --data-urlencode "q=SELECT * FROM liftwork"
+
+
+{"results":[{"statement_id":0,"series":[{"name":"liftwork","columns":["time","LiftWorkDescription","LiftWorkId","liftworkweight"],
+"values":[
+["2018-08-14T02:42:58.164542516Z","DryGoods_1234","5555",2000],
+["2018-08-14T02:43:04.852135957Z","DryGoods_5678","5556",3000],
+["2018-08-14T02:43:09.400237852Z","Outgoing_0001","5557",4000],
+["2018-08-14T02:43:13.870141916Z","Outgoing_0002","5558",2400],
+["2018-08-14T02:43:18.500792878Z","Outgoing_0003","5559",1000]
+]}]}]}
+
+
+
+********** show the series of data in the SCA influxDB 
+
+
+
+show series
+key
+---
+liftwork,LiftWorkDescription=DryGoods_1234,LiftWorkId=5555
+liftwork,LiftWorkDescription=DryGoods_5678,LiftWorkId=5556
+liftwork,LiftWorkDescription=Outgoing_0001,LiftWorkId=5557
+liftwork,LiftWorkDescription=Outgoing_0002,LiftWorkId=5558
+liftwork,LiftWorkDescription=Outgoing_0003,LiftWorkId=5559
+vibrationandtemp,liftID=5555,type=classIII
+vibrationandtemp,liftID=5556,type=classIII
+vibrationandtemp,liftID=5557,type=classIV
+vibrationandtemp,liftID=5558,type=classI
+
+
+
+*********
+
+
+
+READ THIS
+https://docs.influxdata.com/influxdb/v1.6/administration/https_setup/
+https://docs.influxdata.com/influxdb/v1.6/concepts/crosswalk/
+https://docs.influxdata.com/influxdb/v1.6/administration/security/
+
+
+
+********* INSTALL and RUN ********
+
+get the influxdb docker image 
+
+docker pull influxdb 
+
+or the smaller alpine linux image 
+
+docker pull influxdb:alpine
+
+run the influxdb docker container 
+
+docker run -p 8086:8086 \
+>       -v influxdb:/var/lib/influxdb \
+>       influxdb
+ts=2018-08-14T01:09:21.925811Z lvl=info msg="InfluxDB starting" log_id=09uVXHXG000 version=1.6.1 branch=1.6 commit=5766854b95ae86cccf6cc8ffe4c5bb9eacc994b8
+ts=2018-08-14T01:09:21.925874Z lvl=info msg="Go runtime" log_id=09uVXHXG000 version=go1.10.3 maxprocs=6
+ts=2018-08-14T01:09:22.038563Z lvl=info msg="Using data dir" log_id=09uVXHXG000 service=store path=/var/lib/influxdb/data
+ts=2018-08-14T01:09:22.038679Z lvl=info msg="Compaction settings" log_id=09uVXHXG000 service=store max_concurrent_compactions=3 throughput_bytes_per_second=50331648 throughput_burst_bytes=50331648
+ts=2018-08-14T01:09:22.038694Z lvl=info msg="Open store (start)" log_id=09uVXHXG000 service=store trace_id=09uVXHyW000 op_name=tsdb_open op_event=start
+ts=2018-08-14T01:09:22.038733Z lvl=info msg="Open store (end)" log_id=09uVXHXG000 service=store trace_id=09uVXHyW000 op_name=tsdb_open op_event=end op_elapsed=0.040ms
+ts=2018-08-14T01:09:22.039271Z lvl=info msg="Opened service" log_id=09uVXHXG000 service=subscriber
+ts=2018-08-14T01:09:22.039308Z lvl=info msg="Starting monitor service" log_id=09uVXHXG000 service=monitor
+ts=2018-08-14T01:09:22.039316Z lvl=info msg="Registered diagnostics client" log_id=09uVXHXG000 service=monitor name=build
+ts=2018-08-14T01:09:22.039322Z lvl=info msg="Registered diagnostics client" log_id=09uVXHXG000 service=monitor name=runtime
+ts=2018-08-14T01:09:22.039331Z lvl=info msg="Registered diagnostics client" log_id=09uVXHXG000 service=monitor name=network
+ts=2018-08-14T01:09:22.039413Z lvl=info msg="Registered diagnostics client" log_id=09uVXHXG000 service=monitor name=system
+ts=2018-08-14T01:09:22.040027Z lvl=info msg="Starting precreation service" log_id=09uVXHXG000 service=shard-precreation check_interval=10m advance_period=30m
+ts=2018-08-14T01:09:22.040164Z lvl=info msg="Starting snapshot service" log_id=09uVXHXG000 service=snapshot
+ts=2018-08-14T01:09:22.040205Z lvl=info msg="Starting continuous query service" log_id=09uVXHXG000 service=continuous_querier
+ts=2018-08-14T01:09:22.041026Z lvl=info msg="Starting HTTP service" log_id=09uVXHXG000 service=httpd authentication=false
+ts=2018-08-14T01:09:22.041057Z lvl=info msg="opened HTTP access log" log_id=09uVXHXG000 service=httpd path=stderr
+ts=2018-08-14T01:09:22.041156Z lvl=info msg="Listening on HTTP" log_id=09uVXHXG000 service=httpd addr=[::]:8086 https=false
+ts=2018-08-14T01:09:22.041200Z lvl=info msg="Starting retention policy enforcement service" log_id=09uVXHXG000 service=retention check_interval=30m
+ts=2018-08-14T01:09:22.040119Z lvl=info msg="Storing statistics" log_id=09uVXHXG000 service=monitor db_instance=_internal db_rp=monitor interval=10s
+ts=2018-08-14T01:09:22.041545Z lvl=info msg="Listening for signals" log_id=09uVXHXG000
+ts=2018-08-14T01:09:22.041762Z lvl=info msg="Sending usage statistics to usage.influxdata.com" log_id=09uVXHXG000
+
+
+
+***************** or ***************** 
+
+run it fron a configuration file  
+
+generate a configuration file 
+docker run --rm influxdb influxd config > influxdb.conf
+
+
+reporting-disabled = false
+bind-address = "127.0.0.1:8088"
+
+[meta]
+  dir = "/var/lib/influxdb/meta"
+  retention-autocreate = true
+  logging-enabled = true
+
+[data]
+  dir = "/var/lib/influxdb/data"
+  index-version = "inmem"
+  wal-dir = "/var/lib/influxdb/wal"
+  wal-fsync-delay = "0s"
+  query-log-enabled = true
+  cache-max-memory-size = 1073741824
+  cache-snapshot-memory-size = 26214400
+  cache-snapshot-write-cold-duration = "10m0s"
+  compact-full-write-cold-duration = "4h0m0s"
+  max-series-per-database = 1000000
+  max-values-per-tag = 100000
+  max-concurrent-compactions = 0
+  max-index-log-file-size = 1048576
+  trace-logging-enabled = false
+  tsm-use-madv-willneed = false
+
+[coordinator]
+  write-timeout = "10s"
+  max-concurrent-queries = 0
+  query-timeout = "0s"
+  log-queries-after = "0s"
+  max-select-point = 0
+  max-select-series = 0
+  max-select-buckets = 0
+
+[retention]
+  enabled = true
+  check-interval = "30m0s"
+
+[shard-precreation]
+  enabled = true
+  check-interval = "10m0s"
+  advance-period = "30m0s"
+
+[monitor]
+  store-enabled = true
+  store-database = "_internal"
+  store-interval = "10s"
+
+[subscriber]
+  enabled = true
+  http-timeout = "30s"
+  insecure-skip-verify = false
+  ca-certs = ""
+  write-concurrency = 40
+  write-buffer-size = 1000
+
+[http]
+  enabled = true
+  bind-address = ":8086"
+  auth-enabled = false
+  log-enabled = true
+  suppress-write-log = false
+  write-tracing = false
+  pprof-enabled = true
+  debug-pprof-enabled = false
+  https-enabled = false
+  https-certificate = "/etc/ssl/influxdb.pem"
+  https-private-key = ""
+  max-row-limit = 0
+  max-connection-limit = 0
+  shared-secret = ""
+  realm = "InfluxDB"
+  unix-socket-enabled = false
+  unix-socket-permissions = "0777"
+  bind-socket = "/var/run/influxdb.sock"
+  max-body-size = 25000000
+  access-log-path = ""
+  max-concurrent-write-limit = 0
+  max-enqueued-write-limit = 0
+  enqueued-write-timeout = 30000000000
+
+[logging]
+  format = "auto"
+  level = "info"
+  suppress-logo = false
+
+[ifql]
+  enabled = false
+  log-enabled = true
+  bind-address = ":8082"
+
+[[graphite]]
+  enabled = true
+  bind-address = ":2003"
+  database = "graphite"
+  retention-policy = ""
+  protocol = "tcp"
+  batch-size = 5000
+  batch-pending = 10
+  batch-timeout = "1s"
+  consistency-level = "one"
+  separator = "."
+  udp-read-buffer = 0
+
+[[collectd]]
+  enabled = false
+  bind-address = ":25826"
+  database = "collectd"
+  retention-policy = ""
+  batch-size = 5000
+  batch-pending = 10
+  batch-timeout = "10s"
+  read-buffer = 0
+  typesdb = "/usr/share/collectd/types.db"
+  security-level = "none"
+  auth-file = "/etc/collectd/auth_file"
+  parse-multivalue-plugin = "split"
+
+[[opentsdb]]
+  enabled = false
+  bind-address = ":4242"
+  database = "opentsdb"
+  retention-policy = ""
+  consistency-level = "one"
+  tls-enabled = false
+  certificate = "/etc/ssl/influxdb.pem"
+  batch-size = 1000
+  batch-pending = 5
+  batch-timeout = "1s"
+  log-point-errors = true
+
+[[udp]]
+  enabled = false
+  bind-address = ":8089"
+  database = "udp"
+  retention-policy = ""
+  batch-size = 5000
+  batch-pending = 10
+  read-buffer = 0
+  batch-timeout = "1s"
+  precision = ""
+
+[continuous_queries]
+  log-enabled = true
+  enabled = true
+  query-stats-enabled = false
+  run-interval = "1s"
+
+[tls]
+  min-version = ""
+  max-version = ""
+
+
+****************** starting a READ ONLY docker alpine influxdb container from a configuration file in /opt/containers **********
+
+  $ docker run -p 8086:8086 -p 8083:8083 -e INFLUXDB_ADMIN_ENABLED=true -v /opt/containers/influxdb.conf:/etc/influxdb/influxdb.conf:ro influxdb:alpine -config /etc/influxdb/influxdb.conf
+ts=2018-08-14T01:46:07.742688Z lvl=info msg="InfluxDB starting" log_id=09uXcu~W000 version=1.6.1 branch=1.6 commit=5766854b95ae86cccf6cc8ffe4c5bb9eacc994b8
+ts=2018-08-14T01:46:07.742704Z lvl=info msg="Go runtime" log_id=09uXcu~W000 version=go1.10.3 maxprocs=6
+ts=2018-08-14T01:46:07.846456Z lvl=info msg="Using data dir" log_id=09uXcu~W000 service=store path=/var/lib/influxdb/data
+ts=2018-08-14T01:46:07.846786Z lvl=info msg="Compaction settings" log_id=09uXcu~W000 service=store max_concurrent_compactions=3 throughput_bytes_per_second=50331648 throughput_burst_bytes=50331648
+ts=2018-08-14T01:46:07.846890Z lvl=info msg="Open store (start)" log_id=09uXcu~W000 service=store trace_id=09uXcvPW000 op_name=tsdb_open op_event=start
+ts=2018-08-14T01:46:07.847020Z lvl=info msg="Open store (end)" log_id=09uXcu~W000 service=store trace_id=09uXcvPW000 op_name=tsdb_open op_event=end op_elapsed=0.136ms
+ts=2018-08-14T01:46:07.847129Z lvl=info msg="Opened service" log_id=09uXcu~W000 service=subscriber
+ts=2018-08-14T01:46:07.847163Z lvl=info msg="Starting monitor service" log_id=09uXcu~W000 service=monitor
+ts=2018-08-14T01:46:07.847225Z lvl=info msg="Registered diagnostics client" log_id=09uXcu~W000 service=monitor name=build
+ts=2018-08-14T01:46:07.847249Z lvl=info msg="Registered diagnostics client" log_id=09uXcu~W000 service=monitor name=runtime
+ts=2018-08-14T01:46:07.847286Z lvl=info msg="Registered diagnostics client" log_id=09uXcu~W000 service=monitor name=network
+ts=2018-08-14T01:46:07.847354Z lvl=info msg="Registered diagnostics client" log_id=09uXcu~W000 service=monitor name=system
+ts=2018-08-14T01:46:07.847570Z lvl=info msg="Starting precreation service" log_id=09uXcu~W000 service=shard-precreation check_interval=10m advance_period=30m
+ts=2018-08-14T01:46:07.847666Z lvl=info msg="Starting snapshot service" log_id=09uXcu~W000 service=snapshot
+ts=2018-08-14T01:46:07.847703Z lvl=info msg="Starting continuous query service" log_id=09uXcu~W000 service=continuous_querier
+ts=2018-08-14T01:46:07.847772Z lvl=info msg="Starting HTTP service" log_id=09uXcu~W000 service=httpd authentication=false
+ts=2018-08-14T01:46:07.847691Z lvl=info msg="Storing statistics" log_id=09uXcu~W000 service=monitor db_instance=_internal db_rp=monitor interval=10s
+ts=2018-08-14T01:46:07.847794Z lvl=info msg="opened HTTP access log" log_id=09uXcu~W000 service=httpd path=stderr
+ts=2018-08-14T01:46:07.848098Z lvl=info msg="Listening on HTTP" log_id=09uXcu~W000 service=httpd addr=[::]:8086 https=false
+ts=2018-08-14T01:46:07.848177Z lvl=info msg="Starting retention policy enforcement service" log_id=09uXcu~W000 service=retention check_interval=30m
+ts=2018-08-14T01:46:07.848484Z lvl=info msg="Sending usage statistics to usage.influxdata.com" log_id=09uXcu~W000
+ts=2018-08-14T01:46:07.848695Z lvl=info msg="Listening for signals" log_id=09uXcu~W000
+
+
+
+
+
+****************** starting a READ WRITE docker alpine influxdb container from a configuration file in /opt/containers **********
+
+  $ docker run -p 8086:8086 -p 8083:8083 -e INFLUXDB_ADMIN_ENABLED=true -v /opt/containers/influxdb.conf:/etc/influxdb/influxdb.conf:rw influxdb:alpine -config /etc/influxdb/influxdb.conf
+ts=2018-08-14T01:46:07.742688Z lvl=info msg="InfluxDB starting" log_id=09uXcu~W000 version=1.6.1 branch=1.6 commit=5766854b95ae86cccf6cc8ffe4c5bb9eacc994b8
+ts=2018-08-14T01:46:07.742704Z lvl=info msg="Go runtime" log_id=09uXcu~W000 version=go1.10.3 maxprocs=6
+ts=2018-08-14T01:46:07.846456Z lvl=info msg="Using data dir" log_id=09uXcu~W000 service=store path=/var/lib/influxdb/data
+ts=2018-08-14T01:46:07.846786Z lvl=info msg="Compaction settings" log_id=09uXcu~W000 service=store max_concurrent_compactions=3 throughput_bytes_per_second=50331648 throughput_burst_bytes=50331648
+ts=2018-08-14T01:46:07.846890Z lvl=info msg="Open store (start)" log_id=09uXcu~W000 service=store trace_id=09uXcvPW000 op_name=tsdb_open op_event=start
+ts=2018-08-14T01:46:07.847020Z lvl=info msg="Open store (end)" log_id=09uXcu~W000 service=store trace_id=09uXcvPW000 op_name=tsdb_open op_event=end op_elapsed=0.136ms
+ts=2018-08-14T01:46:07.847129Z lvl=info msg="Opened service" log_id=09uXcu~W000 service=subscriber
+ts=2018-08-14T01:46:07.847163Z lvl=info msg="Starting monitor service" log_id=09uXcu~W000 service=monitor
+ts=2018-08-14T01:46:07.847225Z lvl=info msg="Registered diagnostics client" log_id=09uXcu~W000 service=monitor name=build
+ts=2018-08-14T01:46:07.847249Z lvl=info msg="Registered diagnostics client" log_id=09uXcu~W000 service=monitor name=runtime
+ts=2018-08-14T01:46:07.847286Z lvl=info msg="Registered diagnostics client" log_id=09uXcu~W000 service=monitor name=network
+ts=2018-08-14T01:46:07.847354Z lvl=info msg="Registered diagnostics client" log_id=09uXcu~W000 service=monitor name=system
+ts=2018-08-14T01:46:07.847570Z lvl=info msg="Starting precreation service" log_id=09uXcu~W000 service=shard-precreation check_interval=10m advance_period=30m
+ts=2018-08-14T01:46:07.847666Z lvl=info msg="Starting snapshot service" log_id=09uXcu~W000 service=snapshot
+ts=2018-08-14T01:46:07.847703Z lvl=info msg="Starting continuous query service" log_id=09uXcu~W000 service=continuous_querier
+ts=2018-08-14T01:46:07.847772Z lvl=info msg="Starting HTTP service" log_id=09uXcu~W000 service=httpd authentication=false
+ts=2018-08-14T01:46:07.847691Z lvl=info msg="Storing statistics" log_id=09uXcu~W000 service=monitor db_instance=_internal db_rp=monitor interval=10s
+ts=2018-08-14T01:46:07.847794Z lvl=info msg="opened HTTP access log" log_id=09uXcu~W000 service=httpd path=stderr
+ts=2018-08-14T01:46:07.848098Z lvl=info msg="Listening on HTTP" log_id=09uXcu~W000 service=httpd addr=[::]:8086 https=false
+ts=2018-08-14T01:46:07.848177Z lvl=info msg="Starting retention policy enforcement service" log_id=09uXcu~W000 service=retention check_interval=30m
+ts=2018-08-14T01:46:07.848484Z lvl=info msg="Sending usage statistics to usage.influxdata.com" log_id=09uXcu~W000
+ts=2018-08-14T01:46:07.848695Z lvl=info msg="Listening for signals" log_id=09uXcu~W000
+
+
+
+
+
+******************
+
+Modify $PWD to the directory where you want to store the configuration file.
+
+For environment variables, the format is INFLUXDB_$SECTION_$NAME. All dashes (-) are replaced with underscores (_). If the variable isn't in a section, then omit that part.
+
+Examples:
+
+INFLUXDB_REPORTING_DISABLED=true
+INFLUXDB_META_DIR=/path/to/metadir
+INFLUXDB_DATA_QUERY_LOG_ENABLED=false
+
+Find more about configuring InfluxDB here.
+Graphite
+
+InfluxDB supports the Graphite line protocol, but the service and ports are not exposed by default. To run InfluxDB with Graphite support enabled, you can either use a configuration file or set the appropriate environment variables. Run InfluxDB with the default Graphite configuration:
+
+docker run -p 8086:8086 -p 2003:2003 \
+    -e INFLUXDB_GRAPHITE_ENABLED=true \
+    influxdb
+
+See the README on GitHub for more detailed documentation to set up the Graphite service. In order to take advantage of graphite templates, you should use a configuration file by outputting a default configuration file using the steps above and modifying the [[graphite]] section.
+Administrator Interface
+
+The administrator interface is deprecated as of 1.1.0 and will be removed in 1.3.0. It is disabled by default. If needed, it can still be enabled by setting an environment variable like below:
+
+docker run -p 8086:8086 -p 8083:8083 \
+    -e INFLUXDB_ADMIN_ENABLED=true \
+    influxdb
+
+
+
+
+********* VERIFY the influxdb alpine container is running ********
+
+docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                            NAMES
+8cd3de3dcf5d        influxdb:alpine     "/entrypoint.sh -con…"   38 seconds ago      Up 36 seconds       0.0.0.0:8083->8083/tcp, 0.0.0.0:8086->8086/tcp   
+
+
+***********
+
+
+
+
+To use the administrator interface, both the HTTP API and the administrator interface API's must be forwarded to the same port.
+HTTP API
+
+Creating a DB named mydb:
+
+$ curl -G http://localhost:8086/query --data-urlencode "q=CREATE DATABASE mydb"
+
+Inserting into the DB:
+
+$ curl -i -XPOST 'http://localhost:8086/write?db=mydb' --data-binary 'cpu_load_short,host=server01,region=us-west value=0.64 1434055562000000000'
+
+Read more about this in the official documentation
+CLI / SHELL
+
+Start the container:
+
+$ docker run --name=influxdb -d -p 8086:8086 influxdb
+
+Run the influx client in this container:
+
+$ docker exec -it influxdb influx
+
+Or run the influx client in a separate container:
+
+$ docker run --rm --link=influxdb -it influxdb influx -host influxdb
+
+Database Initialization
+
+The InfluxDB image contains some extra functionality for initializing a database. These options are not suggested for production, but are quite useful when running standalone instances for testing.
+
+The database initialization script will only be called when running influxd. It will not be executed when running any other program.
+Environment Variables
+
+The InfluxDB image uses several environment variables to automatically configure certain parts of the server. They may significantly aid you in using this image.
+INFLUXDB_DB
+
+Automatically initializes a database with the name of this environment variable.
+INFLUXDB_HTTP_AUTH_ENABLED
+
+Enables authentication. Either this must be set or auth-enabled = true must be set within the configuration file for any authentication related options below to work.
+INFLUXDB_ADMIN_USER
+
+The name of the admin user to be created. If this is unset, no admin user is created.
+INFLUXDB_ADMIN_PASSWORD
+
+The password for the admin user configured with INFLUXDB_ADMIN_USER. If this is unset, a random password is generated and printed to standard out.
+INFLUXDB_USER
+
+The name of a user to be created with no privileges. If INFLUXDB_DB is set, this user will be granted read and write permissions for that database.
+INFLUXDB_USER_PASSWORD
+
+The password for the user configured with INFLUXDB_USER. If this is unset, a random password is generated and printed to standard out.
+INFLUXDB_READ_USER
+
+The name of a user to be created with read privileges on INFLUXDB_DB. If INFLUXDB_DB is not set, this user will have no granted permissions.
+INFLUXDB_READ_USER_PASSWORD
+
+The password for the user configured with INFLUXDB_READ_USER. If this is unset, a random password is generated and printed to standard out.
+INFLUXDB_WRITE_USER
+
+The name of a user to be created with write privileges on INFLUXDB_DB. If INFLUXDB_DB is not set, this user will have no granted permissions.
+INFLUXDB_WRITE_USER_PASSWORD
+
+The password for the user configured with INFLUXDB_WRITE_USER. If this is unset, a random password is generated and printed to standard out.
+Initialization Files
+
+If the Docker image finds any files with the extensions .sh or .iql inside of the /docker-entrypoint-initdb.d folder, it will execute them. The order they are executed in is determined by the shell. This is usually alphabetical order.
+Manually Initializing the Database
+
+To manually initialize the database and exit, the /init-influxdb.sh script can be used directly. It takes the same parameters as the influxd run command. As an example:
+
+$ docker run --rm \
+      -e INFLUXDB_DB=db0 -e INFLUXDB_ADMIN_ENABLED=true \
+      -e INFLUXDB_ADMIN_USER=admin -e INFLUXDB_ADMIN_PASSWORD=supersecretpassword \
+      -e INFLUXDB_USER=telegraf -e INFLUXDB_USER_PASSWORD=secretpassword \
+      -v $PWD:/var/lib/influxdb \
+      influxdb /init-influxdb.sh
+
+The above would create the database db0, create an admin user with the password supersecretpassword, then create the telegraf user with your telegraf's secret password. It would then exit and leave behind any files it created in the volume that you mounted.
+Image Variants
+
+The influxdb images come in many flavors, each designed for a specific use case.
+influxdb:<version>
+
+This is the defacto image. If you are unsure about what your needs are, you probably want to use this one. It is designed to be used both as a throw away container (mount your source code and start the container to start your app), as well as the base to build other images off of.
+influxdb:alpine
+
+This image is based on the popular Alpine Linux project, available in the alpine official image. Alpine Linux is much smaller than most distribution base images (~5MB), and thus leads to much slimmer images in general.
+
+This variant is highly recommended when final image size being as small as possible is desired. The main caveat to note is that it does use musl libc instead of glibc and friends, so certain software might run into issues depending on the depth of their libc requirements. However, most software doesn't have an issue with this, so this variant is usually a very safe choice. See this Hacker News comment thread for more discussion of the issues that might arise and some pro/con comparisons of using Alpine-based images.
+
+To minimize image size, it's uncommon for additional related tools (such as git or bash) to be included in Alpine-based images. Using this image as a base, add the things you need in your own Dockerfile (see the alpine image description for examples of how to install packages if you are unfamiliar).
+influxdb:data
+
+This image requires a valid license key from InfluxData. Please visit our products page to learn more.
+
+This image contains the enterprise data node package for clustering. It supports all of the same options as the OSS image, but it needs port 8088 to be exposed to the meta nodes.
+
+Refer to the influxdb:meta variant for directions on how to setup a cluster.
+influxdb:meta
+
+This image requires a valid license key from InfluxData. Please visit our products page to learn more.
+
+This image contains the enterprise meta node package for clustering. It is meant to be used in conjunction with the influxdb:data package of the same version.
+Using this Image
+Specifying the license key
+
+The license key can be specified using either an environment variable or by overriding the configuration file. If you specify the license key directly, the container needs to be able to access the InfluxData portal.
+
+$ docker run -p 8089:8089 -p 8091:8091 \
+      -e INFLUXDB_ENTERPRISE_LICENSE_KEY=<license-key>
+      influxdb:meta
+
+Running the container
+
+The examples below will use docker's built-in networking capability. If you use the port exposing feature, the host port and the container port need to be the same.
+
+First, create a docker network:
+
+$ docker network create influxdb
+
+Start three meta nodes. This is the suggested number of meta nodes. We do not recommend running more or less. If you choose to run more or less, be sure that the number of meta nodes is odd. The hostname must be set on each container to the address that will be used to access the meta node. When using docker networks, the hostname should be made the same as the name of the container.
+
+$ docker run -d --name=influxdb-meta-0 --network=influxdb \
+      -h influxdb-meta-0 \
+      -e INFLUXDB_ENTERPRISE_LICENSE_KEY=<license-key> \
+      influxdb:meta
+$ docker run -d --name=influxdb-meta-1 --network=influxdb \
+      -h influxdb-meta-1 \
+      -e INFLUXDB_ENTERPRISE_LICENSE_KEY=<license-key> \
+      influxdb:meta
+$ docker run -d --name=influxdb-meta-2 --network=influxdb \
+      -h influxdb-meta-2 \
+      -e INFLUXDB_ENTERPRISE_LICENSE_KEY=<license-key> \
+      influxdb:meta
+
+When setting the hostname, you can use -h <hostname> or you can directly set the environment variable using -e INFLUXDB_HOSTNAME=<hostname>.
+
+After starting the meta nodes, you need to tell them about each other. Choose one of the meta nodes and run influxd-ctl in the container.
+
+$ docker exec influxdb-meta-0 \
+      influxd-ctl add-meta influxdb-meta-1:8091
+$ docker exec influxdb-meta-0 \
+      influxd-ctl add-meta influxdb-meta-2:8091
+
+Or you can just start a single meta node. If you setup a single meta node, you do not need to use influxd-ctl add-meta.
+
+$ docker run -d --name=influxdb-meta --network=influxdb \
+      -h influxdb-meta \
+      -e INFLUXDB_ENTERPRISE_LICENSE_KEY=<license-key> \
+      influxdb:meta -single-server
+
+Connecting the data nodes
+
+Start the data nodes using influxdb:data with similar command line arguments to the meta nodes. You can start as many data nodes as are allowed by your license.
+
+$ docker run -d --name=influxdb-data-0 --network=influxdb \
+      -h influxdb-data-0 \
+      -e INFLUXDB_LICENSE_KEY=<license-key> \
+      influxdb:data
+
+You can add -p 8086:8086 to expose the http port to the host machine. After starting the container, choose one of the meta nodes and add the data node to it.
+
+$ docker exec influxdb-meta-0 \
+      influxd-ctl add-data influxdb-data-0:8088
+
+Perform these same steps for any other data nodes that you want to add.
+
+You can now connect to any of the running data nodes to use your cluster.
+
+See the influxdb image documentation for more details on how to use the data node images.
+Configuration
+
+InfluxDB Meta can be either configured from a config file or using environment variables. To mount a configuration file and use it with the server, you can use this command:
+
+Generate the default configuration file:
+
+$ docker run --rm influxdb:meta influxd-meta config > influxdb-meta.conf
+
+Modify the default configuration, which will now be available under $PWD. Then start the InfluxDB Meta container.
+
+$ docker run \
+      -v $PWD/influxdb-meta.conf:/etc/influxdb/influxdb-meta.conf:ro \
+      influxdb -config /etc/influxdb/influxdb-meta.conf
+
+Modify $PWD to the directory where you want to store the configuration file.
+
+For environment variables, the format is INFLUXDB_$SECTION_$NAME. All dashes (-) are replaced with underscores (_). If the variable isn't in a section, then omit that part.
+
+Examples:
+
+INFLUXDB_REPORTING_DISABLED=true
+INFLUXDB_META_DIR=/path/to/metadir
+INFLUXDB_ENTERPRISE_REGISTRATION_ENABLED=true
+
+Find more about configuring InfluxDB Meta here.
+License
+
+View license information for the software contained in this image.
+
+As with all Docker images, these likely also contain other software which may be under other licenses (such as Bash, etc from the base distribution, along with any direct or indirect dependencies of the primary software being contained).
+
+Some additional license information which was able to be auto-detected might be found in the repo-info repository's influxdb/ directory.
+
+As for any pre-built image usage, it is the image user's responsibility to ensure that any use of this image complies with any relevant licenses for all software contained within.
